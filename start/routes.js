@@ -20,11 +20,27 @@ Route.post('/sessions', 'SessionController.store')
 Route.post('/users', 'UserController.store')
 Route.put('/users/:id', 'UserController.update').middleware('auth')
 
+// o resource reconhece automaticamente, pega todos os metodos da api (caso não precise de todos os método é necessário usar except )
 Route.resource('/posts', 'PostController')
   .apiOnly()
-  .middleware('auth')
+  // is : é para verificar se o model tem alguma role
+  // (caso não precise de todos os métodos é necessário usar except )
+  .except(['index', 'show'])
+  .middleware(['auth', 'is:(administrator || moderator'])
 
-// o resource reconhece automaticamente, pega todos os metodos da api
+Route.get('/posts', 'PostController.index')
+  // aqui é definido oque a gente quer permitir acesso
+  .middleware([
+    'auth',
+    'can:read_posts'
+  ])
+
+Route.get('/posts/:id', 'PostController.show')
+  .middleware([
+    'auth',
+    'can:read_posts'
+  ])
+
 Route.resource('/permissions', 'PermissionController')
   .apiOnly()
   .middleware('auth')
