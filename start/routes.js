@@ -24,7 +24,11 @@ Route.resource('/posts', 'PostController')
   .apiOnly()
   .middleware('auth')
 
-//
-Route.resource('permissions', 'PermissionController')
+// o resource reconhece automaticamente, pega todos os metodos da api
+Route.resource('/permissions', 'PermissionController')
+  .apiOnly()
+  .middleware('auth')
+
+Route.resource('/roles', 'RoleController')
   .apiOnly()
   .middleware('auth')
